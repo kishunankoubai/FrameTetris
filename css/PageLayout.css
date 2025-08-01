@@ -1,0 +1,22 @@
+* {
+    min-height: fit-content;
+    min-width: fit-content;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 7vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.label {
+    text-align: center;
+}
+
+.headingLabel {
+    margin-top: 5vh;
+    margin-bottom: auto;
+}
+
+.back {
+    margin-top: auto;
+    margin-bottom: 5vh;
+}

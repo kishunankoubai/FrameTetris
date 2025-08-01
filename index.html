@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="css/PageManager.css" />
+        <link rel="stylesheet" href="css/PageLayout.css" />
+        <link rel="stylesheet" href="css/BlockLayout.css" />
+        <title>MineTetris</title>
+    </head>
+    <body data-initial-page="pageStart">
+        <div id="invalidPanel">
+            <div class="label headingLabel">NowLoading...</div>
+        </div>
+
+        <div class="page" id="pageStart">
+            <div class="label" id="pageStartLabel">Presented By MCR</div>
+        </div>
+
+        <div class="page" id="title">
+            <div class="label headingLabel">FrameTetris</div>
+            <div class="options">
+                <button data-page="gameModeSelect">モード選択</button>
+            </div>
+        </div>
+
+        <div class="page" id="gameModeSelect">
+            <div class="label headingLabel">モード選択</div>
+            <div class="options">
+                <button data-page="playPreparing">モード1</button>
+            </div>
+            <button class="back">戻る</button>
+        </div>
+        <div class="page" id="playPreparing">
+            <div class="label headingLabel">プレイ準備</div>
+            <div class="options">
+                <button data-page="play">プレイ開始</button>
+            </div>
+            <button class="back">戻る</button>
+        </div>
+        <div class="page" id="play"></div>
+
+        <script src="dist/Utils.js"></script>
+        <script src="dist/EventManager.js"></script>
+        <script src="dist/PageManager.js"></script>
+        <script src="dist/KeyboardManager.js"></script>
+        <script src="dist/PageLayout.js"></script>
+        <script src="dist/Block.js"></script>
+        <script src="dist/MinoOperatePanel.js"></script>
+        <script src="dist/BGM.js"></script>
+        <script src="dist/SE.js"></script>
+        <script src="dist/Run.js"></script>
+    </body>
+</html>

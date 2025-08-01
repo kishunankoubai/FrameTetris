@@ -1,0 +1,40 @@
+.block {
+    aspect-ratio: 1;
+    background-color: #222;
+    border: gray 0.1vh solid;
+    box-sizing: border-box;
+    font-size: 3vh;
+    text-align: center;
+    color: transparent;
+}
+
+.blockBase {
+    display: grid;
+    background-color: blanchedalmond;
+}
+
+.block[data-visible="true"] {
+    background-color: #ddd;
+    color: red;
+}
+.block[data-visible="true"][data-kind="0"] {
+    background-color: #ff0000;
+}
+.block[data-visible="true"][data-kind="1"] {
+    background-color: #00ff00;
+}
+.block[data-visible="true"][data-kind="2"] {
+    background-color: #0000ff;
+}
+.block[data-visible="true"][data-kind="3"] {
+    background-color: #ff8800;
+}
+.block[data-visible="true"][data-kind="4"] {
+    background-color: #ff00ff;
+}
+.block[data-visible="true"][data-kind="5"] {
+    background-color: #ffff00;
+}
+.block[data-visible="true"][data-kind="6"] {
+    background-color: #00ffff;
+}
