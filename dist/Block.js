@@ -339,8 +339,8 @@ class BlockManager {
         }
         this.width = width;
         this.height = height;
-        this.element.style.gridTemplateColumns = `repeat(${this.width}, 5vh)`;
-        this.element.style.gridTemplateRows = `repeat(${this.height}, 5vh)`;
+        this.element.style.gridTemplateColumns = `repeat(${this.width}, ${90 / this.height}vh)`;
+        this.element.style.gridTemplateRows = `repeat(${this.height}, ${90 / this.height}vh)`;
         this.blocks = new Array(this.width);
         for (let w = 0; w < this.width; w++) {
             this.blocks[w] = new Array(this.height);
@@ -395,7 +395,7 @@ class BlockManager {
      * まだ表示されていないtetrominoを表示する　すでに表示されている場合は何もしない
      * @param tetromino 表示させるtetromino
      */
-    display(tetromino) {
+    displayMino(tetromino) {
         if (tetromino.g$visible) {
             return;
         }
@@ -413,7 +413,7 @@ class BlockManager {
      * すでに表示されているtetrominoを非表示にする　すでに表示されていない場合は何もしない
      * @param tetromino
      */
-    remove(tetromino) {
+    removeMino(tetromino) {
         if (!tetromino.g$visible) {
             return;
         }
@@ -427,23 +427,23 @@ class BlockManager {
      * @param dx 相対移動のx成分
      * @param dy 相対移動のy成分
      */
-    move(tetromino, dx, dy) {
+    moveMino(tetromino, dx, dy) {
         if (!tetromino.g$visible) {
             return;
         }
-        this.remove(tetromino);
+        this.removeMino(tetromino);
         tetromino.move(dx, dy);
         if (!this.canDisplay(tetromino)) {
             tetromino.move(-dx, -dy);
         }
-        this.display(tetromino);
+        this.displayMino(tetromino);
         this.paint();
     }
     /**
      * @param tetromino 回転させるtetromino
      * @param dd 相対回転
      */
-    spin(tetromino, dd) {
+    spinMino(tetromino, dd) {
         if (!tetromino.g$visible) {
             return;
         }
@@ -451,7 +451,7 @@ class BlockManager {
         const rightRotation = dd == 1 ? 0 : 1;
         const correction = placeCorrection[tetromino.g$kind][rightRotation][direction];
         let spinSuccess = false;
-        this.remove(tetromino);
+        this.removeMino(tetromino);
         tetromino.spin(dd);
         for (let i = 0; i < correction.length; i++) {
             tetromino.move(correction[i][0], correction[i][1]);
@@ -466,8 +466,44 @@ class BlockManager {
         if (!spinSuccess) {
             tetromino.spin(-dd);
         }
-        this.display(tetromino);
+        this.displayMino(tetromino);
         this.paint();
+    }
+    shiftBlock([fromX, fromY], [toX, toY]) {
+        this.blocks[toX][toY].visible = this.blocks[fromX][fromY].visible;
+        this.blocks[toX][toY].kind = this.blocks[fromX][fromY].kind;
+        this.blocks[toX][toY].number = this.blocks[fromX][fromY].number;
+        this.blocks[fromX][fromY].visible = false;
+    }
+    lineIsFilled(height) {
+        for (let w = 0; w < this.width; w++) {
+            if (!this.blocks[w][height].visible) {
+                return false;
+            }
+        }
+        return true;
+    }
+    shiftLine(height) {
+        for (let h = height; h > 0; h--) {
+            for (let w = 0; w < this.width; w++) {
+                this.shiftBlock([w, h - 1], [w, h]);
+            }
+        }
+        for (let w = 0; w < this.width; w++) {
+            this.blocks[w][0].visible = false;
+        }
+    }
+    removeLines() {
+        let removeCount = 0;
+        for (let h = this.height - 1; h >= 0; h--) {
+            if (this.lineIsFilled(h)) {
+                this.shiftLine(h);
+                h++;
+                removeCount++;
+            }
+        }
+        this.paint();
+        return removeCount;
     }
     frameIsFilled(depth) {
         const oldBorder = Math.floor(this.width / 2) + depth;
@@ -505,26 +541,33 @@ class BlockManager {
             return;
         }
         const youngBorder = this.width - oldBorder - 1;
-        const shiftBlock = ([fromX, fromY], [toX, toY]) => {
-            this.blocks[toX][toY].visible = this.blocks[fromX][fromY].visible;
-            this.blocks[toX][toY].kind = this.blocks[fromX][fromY].kind;
-            this.blocks[fromX][fromY].visible = false;
-        };
         for (let w = 0; w < this.width; w++) {
             for (let h = 0; h < this.height; h++) {
                 if (w == youngBorder + 1 && youngBorder + 1 <= h && h < oldBorder - 1) {
-                    shiftBlock([w, h], [w - 1, h - 1]);
+                    this.shiftBlock([w, h], [w - 1, h - 1]);
                 }
                 if (youngBorder + 1 <= w && w < oldBorder - 1 && h == oldBorder - 1) {
-                    shiftBlock([w, h], [w - 1, h + 1]);
+                    this.shiftBlock([w, h], [w - 1, h + 1]);
                 }
                 if (w == oldBorder - 1 && youngBorder + 1 < h && h <= oldBorder - 1) {
-                    shiftBlock([w, h], [w + 1, h + 1]);
+                    this.shiftBlock([w, h], [w + 1, h + 1]);
                 }
                 if (youngBorder + 1 < w && w <= oldBorder - 1 && h == youngBorder + 1) {
-                    shiftBlock([w, h], [w + 1, h - 1]);
+                    this.shiftBlock([w, h], [w + 1, h - 1]);
                 }
             }
+        }
+        if (this.blocks[youngBorder + 1][youngBorder].visible && this.blocks[youngBorder][youngBorder + 1].visible) {
+            this.blocks[youngBorder][youngBorder].visible = true;
+        }
+        if (this.blocks[youngBorder + 1][oldBorder].visible && this.blocks[youngBorder][oldBorder - 1].visible) {
+            this.blocks[youngBorder][oldBorder].visible = true;
+        }
+        if (this.blocks[oldBorder - 1][youngBorder].visible && this.blocks[oldBorder][youngBorder + 1].visible) {
+            this.blocks[oldBorder][youngBorder].visible = true;
+        }
+        if (this.blocks[oldBorder - 1][oldBorder].visible && this.blocks[oldBorder - 1][oldBorder].visible) {
+            this.blocks[oldBorder][oldBorder].visible = true;
         }
         this.shiftFrame(depth - 1);
     }

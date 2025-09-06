@@ -18,7 +18,9 @@ class KeyboardManager implements MyEventListener {
         };
         this.keyupEvent = (e: KeyboardEvent) => {
             this.pressingKeys = this.pressingKeys.filter((keys, i) => {
-                this.pressTimes[i] = -1;
+                if (keys == e.code) {
+                    this.pressTimes[i] = -1;
+                }
                 return keys != e.code;
                 //console.log("Unpressed:" + e.code);
             });
@@ -28,27 +30,27 @@ class KeyboardManager implements MyEventListener {
     }
 
     //有効かどうか
-    get isValid(): boolean {
+    get g$isValid(): boolean {
         return this.valid;
     }
 
     //押された最新のキー
-    get latestPressingKey(): string {
-        return this.pressingKeys.length != 0 ? this.pressingKeys[this.pressingKeys.length] : "";
+    get g$latestPressingKey(): string {
+        return this.pressingKeys.length != 0 ? this.pressingKeys[this.pressingKeys.length - 1] : "";
     }
 
     //押された最古のキー
-    get oldestPressingKey(): string {
+    get g$oldestPressingKey(): string {
         return this.pressingKeys.length != 0 ? this.pressingKeys[0] : "";
     }
 
     //まだ押されているキーのうちの押された最古の時間
-    get latestPressTime(): number {
-        return this.pressTimes.length != 0 ? this.pressTimes[this.pressTimes.length] : -1;
+    get g$latestPressTime(): number {
+        return this.pressTimes.length != 0 ? this.pressTimes[this.pressTimes.length - 1] : -1;
     }
 
     //まだ押されているキーのうちの押された最新の時間
-    get oldestPressTime(): number {
+    get g$oldestPressTime(): number {
         return this.pressTimes.length != 0 ? this.pressTimes[0] : -1;
     }
 

@@ -64,6 +64,14 @@ class EventManager {
     }
 
     /**
+     * イベントの登録解除
+     * @param eventIds 登録を解除したいイベントのidの配列
+     */
+    static removeEvents(eventIds: EventId[]): void {
+        this.eventList = this.eventList.filter(({ id }) => !eventIds.includes(id));
+    }
+
+    /**
      * イベントの一括登録解除
      * @param className 登録を解除したいイベントのclassName
      */

@@ -18,7 +18,9 @@ class KeyboardManager {
         };
         this.keyupEvent = (e) => {
             this.pressingKeys = this.pressingKeys.filter((keys, i) => {
-                this.pressTimes[i] = -1;
+                if (keys == e.code) {
+                    this.pressTimes[i] = -1;
+                }
                 return keys != e.code;
                 //console.log("Unpressed:" + e.code);
             });
@@ -27,23 +29,23 @@ class KeyboardManager {
         };
     }
     //有効かどうか
-    get isValid() {
+    get g$isValid() {
         return this.valid;
     }
     //押された最新のキー
-    get latestPressingKey() {
-        return this.pressingKeys.length != 0 ? this.pressingKeys[this.pressingKeys.length] : "";
+    get g$latestPressingKey() {
+        return this.pressingKeys.length != 0 ? this.pressingKeys[this.pressingKeys.length - 1] : "";
     }
     //押された最古のキー
-    get oldestPressingKey() {
+    get g$oldestPressingKey() {
         return this.pressingKeys.length != 0 ? this.pressingKeys[0] : "";
     }
     //まだ押されているキーのうちの押された最古の時間
-    get latestPressTime() {
-        return this.pressTimes.length != 0 ? this.pressTimes[this.pressTimes.length] : -1;
+    get g$latestPressTime() {
+        return this.pressTimes.length != 0 ? this.pressTimes[this.pressTimes.length - 1] : -1;
     }
     //まだ押されているキーのうちの押された最新の時間
-    get oldestPressTime() {
+    get g$oldestPressTime() {
         return this.pressTimes.length != 0 ? this.pressTimes[0] : -1;
     }
     //入力を受け取るのを開始する

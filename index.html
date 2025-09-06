@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="css/PageManager.css" />
         <link rel="stylesheet" href="css/PageLayout.css" />
         <link rel="stylesheet" href="css/BlockLayout.css" />
-        <title>MineTetris</title>
+        <title>FrameTetris</title>
     </head>
     <body data-initial-page="pageStart">
         <div id="invalidPanel">
@@ -21,16 +21,19 @@
             <div class="label headingLabel">FrameTetris</div>
             <div class="options">
                 <button data-page="gameModeSelect">モード選択</button>
+                <button data-page="howToPlay">操作方法</button>
             </div>
         </div>
 
         <div class="page" id="gameModeSelect">
             <div class="label headingLabel">モード選択</div>
             <div class="options">
-                <button data-page="playPreparing">モード1</button>
+                <button data-page="playPreparing" data-mode="1">枠</button>
+                <button data-page="playPreparing" data-mode="2">通常</button>
             </div>
             <button class="back">戻る</button>
         </div>
+
         <div class="page" id="playPreparing">
             <div class="label headingLabel">プレイ準備</div>
             <div class="options">
@@ -38,15 +41,44 @@
             </div>
             <button class="back">戻る</button>
         </div>
-        <div class="page" id="play"></div>
+
+        <div class="page" id="play">
+            <div class="label" id="score">Score:0</div>
+            <div class="label" id="remove">Remove:0</div>
+        </div>
+
+        <div class="page" id="result">
+            <div class="label headingLabel">リザルト</div>
+            <div class="text" id="resultText"></div>
+            <div class="options">
+                <button data-back="4">タイトルへ</button>
+            </div>
+        </div>
+
+        <div class="page" id="howToPlay">
+            <div class="label headingLabel">操作方法</div>
+            <div class="text" id="howToPlayText">
+                C……左回転　V……右回転　B……一手戻し<br />
+                枠<br />
+                ・←→↓↑……移動<br />
+                ・X……設置<br />
+                通常<br />
+                ・←→……横移動　↓……落下<br />
+                ・↑……一番下に設置<br />
+            </div>
+            <button class="back">戻る</button>
+        </div>
 
         <script src="dist/Utils.js"></script>
         <script src="dist/EventManager.js"></script>
+        <script src="dist/TimeManager.js"></script>
+        <script src="dist/LoopManager.js"></script>
         <script src="dist/PageManager.js"></script>
         <script src="dist/KeyboardManager.js"></script>
         <script src="dist/PageLayout.js"></script>
         <script src="dist/Block.js"></script>
         <script src="dist/MinoOperatePanel.js"></script>
+        <script src="dist/GameModeManager.js"></script>
         <script src="dist/BGM.js"></script>
         <script src="dist/SE.js"></script>
         <script src="dist/Run.js"></script>
