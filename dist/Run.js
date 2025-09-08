@@ -67,12 +67,10 @@ const pauseOperate = (keyCode) => {
         }
     }
     if (keyCode == "KeyR") {
-        if (pageManager.g$currentPage.id == "pause") {
-        }
-        else {
+        if (pageManager.g$currentPage.id != "pause") {
             pageManager.setPage("pause");
         }
-        document.querySelector("#retryButton").click();
+        document.querySelector(".retryButton").click();
     }
 };
 EventManager.addEvent({

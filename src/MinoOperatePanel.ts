@@ -4,7 +4,7 @@ class MinoOperatePanel implements MyEventListener {
     private prevTetromino: Tetromino | null = null;
     private next = [0, 1, 2, 3, 4, 5, 6];
     private next2 = [0, 1, 2, 3, 4, 5, 6];
-    private putCount = -1;
+    private spawnCount = -1;
     private blockManager: BlockManager;
     private operable: boolean = false;
     private isFinished: boolean = false;
@@ -62,7 +62,7 @@ class MinoOperatePanel implements MyEventListener {
     }
 
     set s$operable(operable: boolean) {
-        this.operable = this.putCount != -1 && !this.isFinished && operable;
+        this.operable = this.spawnCount != -1 && !this.isFinished && operable;
     }
 
     set s$spawnCoordinate(spawnCoordinate: [number, number]) {
@@ -74,17 +74,18 @@ class MinoOperatePanel implements MyEventListener {
      * 出現できない場合はfinishする
      */
     spawnMino() {
-        if (this.putCount == -1) {
-            this.putCount++;
+        if (this.spawnCount == -1) {
+            this.spawnCount++;
         } else {
             this.nowTetromino = new Tetromino();
         }
-        if (this.putCount % 7 == 0) {
+        if (this.spawnCount % 7 == 0) {
+            this.next2 = [0, 1, 2, 3, 4, 5, 6];
             mixArray(this.next2);
         }
         this.nowTetromino.s$kind = this.next.shift()!;
-        this.next.push(this.next2.shift()!);
-        this.next2.push(this.nowTetromino.g$kind);
+        this.next.push(this.next2[this.spawnCount % 7]);
+        this.spawnCount++;
         this.nowTetromino.setLocation(...this.spawnCoordinate);
         if (this.blockManager.canDisplay(this.nowTetromino)) {
             this.blockManager.displayMino(this.nowTetromino);
@@ -158,7 +159,6 @@ class MinoOperatePanel implements MyEventListener {
         if (!this.operable) {
             return;
         }
-        this.putCount++;
         this.prevTetromino = new Tetromino();
         this.prevTetromino.s$kind = this.nowTetromino.g$kind;
         this.prevTetromino.s$x = this.nowTetromino.g$x;
@@ -180,9 +180,9 @@ class MinoOperatePanel implements MyEventListener {
         if (this.prevTetromino) {
             this.blockManager.removeMino(this.nowTetromino);
 
-            this.next2.pop();
-            this.next2.unshift(this.next.pop()!);
+            this.spawnCount--;
             this.next.unshift(this.nowTetromino.g$kind);
+            this.next.pop();
             this.nowTetromino = this.prevTetromino;
             this.prevTetromino = null;
 
@@ -191,7 +191,6 @@ class MinoOperatePanel implements MyEventListener {
             this.nowTetromino.s$direction = 0;
             this.blockManager.displayMino(this.nowTetromino);
 
-            this.putCount--;
             EventManager.executeListeningEvents("unput", this.eventIds);
             this.blockManager.paint();
         }

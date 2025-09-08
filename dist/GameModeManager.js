@@ -386,9 +386,6 @@ class GameModeManager {
                         if (keyCode == "ArrowUp") {
                             this.operatePanel.hardDrop();
                         }
-                        if (keyCode == "KeyX") {
-                            this.operatePanel.put();
-                        }
                         if (keyCode == "KeyC") {
                             this.operatePanel.spin(-1);
                         }
@@ -409,7 +406,7 @@ class GameModeManager {
                     let lastOperateTime = 0;
                     this.loopManager.eventIds.push(EventManager.addEvent({
                         handler: () => {
-                            const latestKey = this.keyboardManager.getLatestPressingKey(["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]);
+                            const latestKey = this.keyboardManager.getLatestPressingKey(["ArrowLeft", "ArrowRight", "ArrowDown"]);
                             const pressTime = Date.now() - this.keyboardManager.getPressTime(latestKey);
                             if (pressTime >= 250) {
                                 if (pressTime - lastOperateTime >= 25) {

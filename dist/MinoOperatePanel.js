@@ -5,7 +5,7 @@ class MinoOperatePanel {
     prevTetromino = null;
     next = [0, 1, 2, 3, 4, 5, 6];
     next2 = [0, 1, 2, 3, 4, 5, 6];
-    putCount = -1;
+    spawnCount = -1;
     blockManager;
     operable = false;
     isFinished = false;
@@ -52,7 +52,7 @@ class MinoOperatePanel {
         return result;
     }
     set s$operable(operable) {
-        this.operable = this.putCount != -1 && !this.isFinished && operable;
+        this.operable = this.spawnCount != -1 && !this.isFinished && operable;
     }
     set s$spawnCoordinate(spawnCoordinate) {
         this.spawnCoordinate = window.structuredClone(spawnCoordinate);
@@ -62,18 +62,19 @@ class MinoOperatePanel {
      * 出現できない場合はfinishする
      */
     spawnMino() {
-        if (this.putCount == -1) {
-            this.putCount++;
+        if (this.spawnCount == -1) {
+            this.spawnCount++;
         }
         else {
             this.nowTetromino = new Tetromino();
         }
-        if (this.putCount % 7 == 0) {
+        if (this.spawnCount % 7 == 0) {
+            this.next2 = [0, 1, 2, 3, 4, 5, 6];
             mixArray(this.next2);
         }
         this.nowTetromino.s$kind = this.next.shift();
-        this.next.push(this.next2.shift());
-        this.next2.push(this.nowTetromino.g$kind);
+        this.next.push(this.next2[this.spawnCount % 7]);
+        this.spawnCount++;
         this.nowTetromino.setLocation(...this.spawnCoordinate);
         if (this.blockManager.canDisplay(this.nowTetromino)) {
             this.blockManager.displayMino(this.nowTetromino);
@@ -144,7 +145,6 @@ class MinoOperatePanel {
         if (!this.operable) {
             return;
         }
-        this.putCount++;
         this.prevTetromino = new Tetromino();
         this.prevTetromino.s$kind = this.nowTetromino.g$kind;
         this.prevTetromino.s$x = this.nowTetromino.g$x;
@@ -164,16 +164,15 @@ class MinoOperatePanel {
         }
         if (this.prevTetromino) {
             this.blockManager.removeMino(this.nowTetromino);
-            this.next2.pop();
-            this.next2.unshift(this.next.pop());
+            this.spawnCount--;
             this.next.unshift(this.nowTetromino.g$kind);
+            this.next.pop();
             this.nowTetromino = this.prevTetromino;
             this.prevTetromino = null;
             this.blockManager.removeMino(this.nowTetromino);
             this.nowTetromino.setLocation(...this.spawnCoordinate);
             this.nowTetromino.s$direction = 0;
             this.blockManager.displayMino(this.nowTetromino);
-            this.putCount--;
             EventManager.executeListeningEvents("unput", this.eventIds);
             this.blockManager.paint();
         }
