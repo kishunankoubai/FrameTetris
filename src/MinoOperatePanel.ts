@@ -47,6 +47,20 @@ class MinoOperatePanel implements MyEventListener {
         return this.blockManager;
     }
 
+    get g$minoCoordinate(): [number, number] {
+        return [this.nowTetromino.g$x, this.nowTetromino.g$y];
+    }
+
+    get g$canFall(): boolean {
+        const y = this.nowTetromino.g$y;
+        this.blockManager.removeMino(this.nowTetromino);
+        this.nowTetromino.s$y = y + 1;
+        const result = this.blockManager.canDisplay(this.nowTetromino);
+        this.nowTetromino.s$y = y;
+        this.blockManager.displayMino(this.nowTetromino);
+        return result;
+    }
+
     set s$operable(operable: boolean) {
         this.operable = this.putCount != -1 && !this.isFinished && operable;
     }
@@ -219,6 +233,34 @@ class MinoOperatePanel implements MyEventListener {
 
     forgetPrevMino() {
         this.prevTetromino = null;
+        this.nowTetromino.s$visible = false;
+    }
+
+    setRandomNumbers(minNumber: number, maxNumber: number) {
+        let numbers = [];
+        for (let i = 0; i < 4; i++) {
+            numbers.push(Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber));
+        }
+        if (this.nowTetromino.g$visible) {
+            this.blockManager.removeMino(this.nowTetromino);
+            this.nowTetromino.s$numbers = numbers;
+            this.blockManager.displayMino(this.nowTetromino);
+        } else {
+            this.nowTetromino.s$numbers = numbers;
+        }
+    }
+    increaseNowMinoNumbers(increaseNumber: number) {
+        if (this.nowTetromino.g$visible) {
+            this.blockManager.removeMino(this.nowTetromino);
+            this.nowTetromino.s$numbers = this.nowTetromino.g$numbers.map((number) => (number == null ? null : number + increaseNumber));
+            this.blockManager.displayMino(this.nowTetromino);
+        } else {
+            this.nowTetromino.s$numbers = this.nowTetromino.g$numbers.map((number) => (number == null ? null : number + increaseNumber));
+        }
+    }
+
+    getNowMinoBlocks() {
+        return this.g$blockManager.getMinoBlocks(this.nowTetromino);
     }
 
     /**

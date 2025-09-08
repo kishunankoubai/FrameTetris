@@ -56,6 +56,7 @@ class LoopManager implements MyEventListener {
         }
         this.loopTimer!.pause();
         cancelAnimationFrame(this.loopId!);
+        this.isLooping = false;
     }
 
     /**

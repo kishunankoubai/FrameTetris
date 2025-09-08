@@ -12,11 +12,9 @@ getElements(".label[data-size]").forEach((label) => {
 const initialData = {
     score: 0,
     remove: 0,
+    count: 50,
 };
-let data = {
-    score: 0,
-    remove: 0,
-};
+let data = structuredClone(initialData);
 function repaintLabels(labelNames) {
     if (labelNames.includes("score")) {
         getElement("#score").style.display = "block";
@@ -32,15 +30,43 @@ function repaintLabels(labelNames) {
     else {
         getElement("#remove").style.display = "none";
     }
+    if (labelNames.includes("count")) {
+        getElement("#count").style.display = "block";
+        getElement("#count").innerHTML = "Count : " + data.count;
+    }
+    else {
+        getElement("#count").style.display = "none";
+    }
 }
 function writeResult(resultNames) {
     let resultHTML = "";
     if (resultNames.includes("score")) {
-        resultHTML += "<br>Score : " + data.score;
+        resultHTML += "Score : " + data.score + "<br>";
     }
     if (resultNames.includes("remove")) {
-        resultHTML += "<br>Remove : " + data.remove;
+        resultHTML += "Remove : " + data.remove + "<br>";
     }
-    resultHTML += "<br>";
     getElement("#resultText").innerHTML = resultHTML;
+}
+function shake(millisecond) {
+    const element = document.getElementsByClassName("blockBase")[0];
+    if (!element.onanimationend) {
+        element.classList.add("shake");
+        element.style.animationDuration = millisecond + "ms";
+        element.onanimationend = () => {
+            element.classList.remove("shake");
+            element.onanimationend = null;
+        };
+    }
+}
+function brighten(elements) {
+    elements.forEach((element) => {
+        if (!element.onanimationend) {
+            element.classList.add("brighten");
+            element.onanimationend = () => {
+                element.classList.remove("brighten");
+                element.onanimationend = null;
+            };
+        }
+    });
 }

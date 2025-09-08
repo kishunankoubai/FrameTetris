@@ -85,7 +85,7 @@ const tetrominoShape = [
         [[0, 0], [1, -1], [-1, 0], [1, 0]],
         [[0, 0], [1, 1], [0, -1], [0, 1]],
         [[0, 0], [-1, 1], [1, 0], [-1, 0]],
-        [[0, 0], [-1, -1], [0, -1], [0, 1]],
+        [[0, 0], [-1, -1], [0, 1], [0, -1]],
     ],
     [
         [[0, 0], [0, -1], [-1, 0], [1, 0]],
@@ -469,11 +469,43 @@ class BlockManager {
         this.displayMino(tetromino);
         this.paint();
     }
+    getMinoBlocks(tetromino) {
+        return tetromino.getBlockCoordinates().map((coordinate) => this.blocks[coordinate[0]][coordinate[1]]);
+    }
     shiftBlock([fromX, fromY], [toX, toY]) {
         this.blocks[toX][toY].visible = this.blocks[fromX][fromY].visible;
         this.blocks[toX][toY].kind = this.blocks[fromX][fromY].kind;
         this.blocks[toX][toY].number = this.blocks[fromX][fromY].number;
         this.blocks[fromX][fromY].visible = false;
+    }
+    decreaseBlockNumbers() {
+        for (let w = 0; w < this.width; w++) {
+            for (let h = 0; h < this.height; h++) {
+                if (this.blocks[w][h].visible && this.blocks[w][h].number) {
+                    this.blocks[w][h].number--;
+                }
+            }
+        }
+    }
+    removeNonPositiveNumbers() {
+        for (let w = 0; w < this.width; w++) {
+            for (let h = 0; h < this.height; h++) {
+                if (this.blocks[w][h].visible && this.blocks[w][h].number != null && this.blocks[w][h].number <= 0) {
+                    this.blocks[w][h].visible = false;
+                }
+            }
+        }
+        this.paint();
+    }
+    isCleared() {
+        for (let w = 0; w < this.width; w++) {
+            for (let h = 0; h < this.height; h++) {
+                if (this.blocks[w][h].visible) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     lineIsFilled(height) {
         for (let w = 0; w < this.width; w++) {
@@ -557,6 +589,7 @@ class BlockManager {
                 }
             }
         }
+        //角の両隣にブロックが存在するなら角も埋める
         if (this.blocks[youngBorder + 1][youngBorder].visible && this.blocks[youngBorder][youngBorder + 1].visible) {
             this.blocks[youngBorder][youngBorder].visible = true;
         }
@@ -575,6 +608,7 @@ class BlockManager {
         let removeCount = 0;
         for (let d = 0; d < Math.floor(this.width / 2); d++) {
             if (this.frameIsFilled(d)) {
+                this.removeFrame(d);
                 this.shiftFrame(d);
                 d--;
                 removeCount++;

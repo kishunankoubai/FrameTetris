@@ -31,6 +31,74 @@ document.querySelectorAll("#gameModeSelect .options *").forEach((element) => {
     });
 });
 
+document.querySelectorAll(".modeDescriptionButton").forEach((element) => {
+    (element as HTMLElement).addEventListener("click", () => {
+        pageManager.setPage("modeDescription" + gameModeManager.g$mode);
+    });
+});
+
+document.querySelectorAll("#quitButton").forEach((element) => {
+    (element as HTMLElement).addEventListener("click", () => {
+        gameModeManager.reset();
+    });
+});
+
+document.querySelectorAll(".retryButton").forEach((element) => {
+    (element as HTMLElement).addEventListener("click", () => {
+        pageManager.backPages(2);
+        const mode = gameModeManager.g$mode;
+        gameModeManager.reset();
+        gameModeManager.s$mode = mode;
+        pageManager.setPage("play");
+    });
+});
+
+document.querySelectorAll("#resumeButton").forEach((element) => {
+    (element as HTMLElement).addEventListener("click", () => {
+        gameModeManager.start();
+    });
+});
+
+const pauseKeyboardManager = new KeyboardManager();
+const pauseOperate = (keyCode: string) => {
+    if (!gameModeManager.isPlaying) {
+        return;
+    }
+    if (keyCode == "KeyP") {
+        if (pageManager.g$currentPage!.id == "pause") {
+            pageManager.backPages(1);
+            gameModeManager.start();
+        } else {
+            pageManager.setPage("pause");
+        }
+    }
+    if (keyCode == "KeyR") {
+        if (pageManager.g$currentPage!.id == "pause") {
+        } else {
+            pageManager.setPage("pause");
+        }
+        (document.querySelector("#retryButton") as HTMLElement).click();
+    }
+};
+
+EventManager.addEvent({
+    handler: () => {
+        gameModeManager.stop();
+    },
+    classNames: ["setPage-pause"],
+});
+
+pauseKeyboardManager.eventIds.push(
+    EventManager.addEvent({
+        handler: () => {
+            const latestKey = pauseKeyboardManager.g$latestPressingKey;
+            pauseOperate(latestKey);
+        },
+        classNames: ["onKeydown"],
+    })
+);
+pauseKeyboardManager.start();
+
 //タイトル画面以降進めないようにする
 // let lockTitle = () => {
 //     const startKeyboardManager = new KeyboardManager();

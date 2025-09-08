@@ -39,6 +39,18 @@ class MinoOperatePanel {
     get g$blockManager() {
         return this.blockManager;
     }
+    get g$minoCoordinate() {
+        return [this.nowTetromino.g$x, this.nowTetromino.g$y];
+    }
+    get g$canFall() {
+        const y = this.nowTetromino.g$y;
+        this.blockManager.removeMino(this.nowTetromino);
+        this.nowTetromino.s$y = y + 1;
+        const result = this.blockManager.canDisplay(this.nowTetromino);
+        this.nowTetromino.s$y = y;
+        this.blockManager.displayMino(this.nowTetromino);
+        return result;
+    }
     set s$operable(operable) {
         this.operable = this.putCount != -1 && !this.isFinished && operable;
     }
@@ -200,6 +212,34 @@ class MinoOperatePanel {
     }
     forgetPrevMino() {
         this.prevTetromino = null;
+        this.nowTetromino.s$visible = false;
+    }
+    setRandomNumbers(minNumber, maxNumber) {
+        let numbers = [];
+        for (let i = 0; i < 4; i++) {
+            numbers.push(Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber));
+        }
+        if (this.nowTetromino.g$visible) {
+            this.blockManager.removeMino(this.nowTetromino);
+            this.nowTetromino.s$numbers = numbers;
+            this.blockManager.displayMino(this.nowTetromino);
+        }
+        else {
+            this.nowTetromino.s$numbers = numbers;
+        }
+    }
+    increaseNowMinoNumbers(increaseNumber) {
+        if (this.nowTetromino.g$visible) {
+            this.blockManager.removeMino(this.nowTetromino);
+            this.nowTetromino.s$numbers = this.nowTetromino.g$numbers.map((number) => (number == null ? null : number + increaseNumber));
+            this.blockManager.displayMino(this.nowTetromino);
+        }
+        else {
+            this.nowTetromino.s$numbers = this.nowTetromino.g$numbers.map((number) => (number == null ? null : number + increaseNumber));
+        }
+    }
+    getNowMinoBlocks() {
+        return this.g$blockManager.getMinoBlocks(this.nowTetromino);
     }
     /**
      * 操作を終了し、操作できなくする

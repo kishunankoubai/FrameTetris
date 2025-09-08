@@ -87,6 +87,7 @@ class TimeManager {
             return;
         }
         this.pauseSpan += Date.now() - this.lastPauseTime!;
+        this.isPausing = false;
     }
 
     /**

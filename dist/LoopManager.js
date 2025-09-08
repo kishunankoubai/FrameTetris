@@ -54,6 +54,7 @@ class LoopManager {
         }
         this.loopTimer.pause();
         cancelAnimationFrame(this.loopId);
+        this.isLooping = false;
     }
     /**
      * ループの中身

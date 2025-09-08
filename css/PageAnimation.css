@@ -1,0 +1,72 @@
+.page {
+    animation-duration: 100ms;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: normal;
+    animation-iteration-count: 1;
+    animation-name: fade;
+}
+
+@keyframes fade {
+    0% {
+        padding-top: 3vh;
+        opacity: 0;
+    }
+    100% {
+        padding-top: 0;
+        opacity: 1;
+    }
+}
+
+button:hover {
+    scale: 1.05;
+    transition: scale 65ms ease-in-out;
+}
+
+.shake {
+    animation-duration: 200ms;
+    animation-timing-function: ease-in;
+    animation-delay: 0;
+    animation-direction: normal;
+    animation-iteration-count: 1;
+    animation-name: shake;
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0vh);
+    }
+    25% {
+        transform: translateX(2vh);
+    }
+    50% {
+        transform: translateX(-1vh);
+    }
+    75% {
+        transform: translateX(0.5vh);
+    }
+    100% {
+        transform: translateX(0vh);
+    }
+}
+
+.brighten {
+    animation-duration: 150ms;
+    animation-timing-function: ease-in;
+    animation-delay: 0;
+    animation-direction: normal;
+    animation-iteration-count: 1;
+    animation-name: brighten;
+}
+
+@keyframes brighten {
+    0% {
+        filter: brightness(1) contrast(1);
+    }
+    15% {
+        filter: brightness(1.7) contrast(0.4);
+    }
+    100% {
+        filter: brightness(1) contrast(1);
+    }
+}

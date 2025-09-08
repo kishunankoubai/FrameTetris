@@ -88,7 +88,7 @@ const tetrominoShape = [
         [[0, 0],[1, -1],[-1, 0],[1, 0]],
         [[0, 0],[1, 1],[0, -1],[0, 1]],
         [[0, 0],[-1, 1],[1, 0],[-1, 0]],
-        [[0, 0],[-1, -1],[0, -1],[0, 1]],
+        [[0, 0],[-1, -1],[0, 1],[0, -1]],
     ],
     [ //T
         [[0, 0],[0, -1],[-1, 0],[1, 0]],
@@ -504,6 +504,10 @@ class BlockManager {
         this.paint();
     }
 
+    getMinoBlocks(tetromino: Tetromino) {
+        return tetromino.getBlockCoordinates().map((coordinate) => this.blocks[coordinate[0]][coordinate[1]]);
+    }
+
     shiftBlock([fromX, fromY]: [number, number], [toX, toY]: [number, number]) {
         this.blocks[toX][toY].visible = this.blocks[fromX][fromY].visible;
         this.blocks[toX][toY].kind = this.blocks[fromX][fromY].kind;
@@ -511,7 +515,39 @@ class BlockManager {
         this.blocks[fromX][fromY].visible = false;
     }
 
-    lineIsFilled(height: number) {
+    decreaseBlockNumbers() {
+        for (let w = 0; w < this.width; w++) {
+            for (let h = 0; h < this.height; h++) {
+                if (this.blocks[w][h].visible && this.blocks[w][h].number) {
+                    this.blocks[w][h].number!--;
+                }
+            }
+        }
+    }
+
+    removeNonPositiveNumbers() {
+        for (let w = 0; w < this.width; w++) {
+            for (let h = 0; h < this.height; h++) {
+                if (this.blocks[w][h].visible && this.blocks[w][h].number != null && this.blocks[w][h].number! <= 0) {
+                    this.blocks[w][h].visible = false;
+                }
+            }
+        }
+        this.paint();
+    }
+
+    isCleared(): boolean {
+        for (let w = 0; w < this.width; w++) {
+            for (let h = 0; h < this.height; h++) {
+                if (this.blocks[w][h].visible) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    lineIsFilled(height: number): boolean {
         for (let w = 0; w < this.width; w++) {
             if (!this.blocks[w][height].visible) {
                 return false;
@@ -601,6 +637,7 @@ class BlockManager {
                 }
             }
         }
+        //角の両隣にブロックが存在するなら角も埋める
         if (this.blocks[youngBorder + 1][youngBorder].visible && this.blocks[youngBorder][youngBorder + 1].visible) {
             this.blocks[youngBorder][youngBorder].visible = true;
         }
@@ -613,6 +650,7 @@ class BlockManager {
         if (this.blocks[oldBorder - 1][oldBorder].visible && this.blocks[oldBorder - 1][oldBorder].visible) {
             this.blocks[oldBorder][oldBorder].visible = true;
         }
+
         this.shiftFrame(depth - 1);
     }
 
@@ -620,6 +658,7 @@ class BlockManager {
         let removeCount = 0;
         for (let d = 0; d < Math.floor(this.width / 2); d++) {
             if (this.frameIsFilled(d)) {
+                this.removeFrame(d);
                 this.shiftFrame(d);
                 d--;
                 removeCount++;

@@ -1,10 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=WDXL+Lubrifont+JP+N&display=swap");
 * {
     min-height: fit-content;
     min-width: fit-content;
-    font-family: Arial, Helvetica, sans-serif;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    font-family: "Orbitron", "WDXL Lubrifont JP N";
     font-size: 7vh;
     align-items: center;
     justify-content: center;
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5vh;
 }
 
 .label {
@@ -32,7 +41,7 @@
 
 body {
     background-color: #222;
-    background-image: repeating-linear-gradient(45deg, #ccc 0px, #ccc 5vh, #bbb 5vh, #bbb 10vh);
+    background-image: repeating-linear-gradient(45deg, #ccc 0px, #ccc 5vh, #c3c3c3 5vh, #c3c3c3 10vh);
 }
 
 button {
@@ -55,6 +64,52 @@ button {
     font-size: 6vh;
 }
 
-#howToPlayText {
+#count {
+    position: absolute;
+    bottom: 30vh;
+    right: 5vh;
+    font-size: 6vh;
+}
+
+#pause {
+    background-color: #ffffff44;
+    & .label {
+        background-color: #ffffff;
+    }
+}
+
+#pauseButton {
     font-size: 4vh;
+    position: absolute;
+    top: 5vh;
+    left: 5vh;
+}
+
+.modeDescription {
+    background-color: #ffffff44;
+    & .text {
+        background-color: #ffffff;
+        font-size: 4vh;
+    }
+    & .label {
+        background-color: #ffffff;
+    }
+}
+
+#result {
+    background-color: #ffffff44;
+    & .text {
+        background-color: #ffffff;
+    }
+    & .label {
+        background-color: #ffffff;
+    }
+}
+
+#aboutThisGame .text {
+    font-size: 4vh;
+}
+
+.page {
+    gap: 5vh;
 }

@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="css/PageManager.css" />
         <link rel="stylesheet" href="css/PageLayout.css" />
         <link rel="stylesheet" href="css/BlockLayout.css" />
+        <link rel="stylesheet" href="css/PageAnimation.css" />
         <title>FrameTetris</title>
     </head>
     <body data-initial-page="pageStart">
@@ -14,22 +15,24 @@
         </div>
 
         <div class="page" id="pageStart">
-            <div class="label" id="pageStartLabel">Presented By MCR</div>
+            <div class="label" id="pageStartLabel">Click anywhere to start……</div>
         </div>
 
         <div class="page" id="title">
-            <div class="label headingLabel">FrameTetris</div>
+            <div class="label headingLabel">StrangeTetris</div>
             <div class="options">
                 <button data-page="gameModeSelect">モード選択</button>
-                <button data-page="howToPlay">操作方法</button>
+                <button data-page="aboutThisGame">このゲームについて</button>
             </div>
         </div>
 
         <div class="page" id="gameModeSelect">
             <div class="label headingLabel">モード選択</div>
             <div class="options">
-                <button data-page="playPreparing" data-mode="1">枠</button>
                 <button data-page="playPreparing" data-mode="2">通常</button>
+                <button data-page="playPreparing" data-mode="4">ため消去</button>
+                <button data-page="playPreparing" data-mode="1">枠</button>
+                <button data-page="playPreparing" data-mode="3">消滅</button>
             </div>
             <button class="back">戻る</button>
         </div>
@@ -38,33 +41,106 @@
             <div class="label headingLabel">プレイ準備</div>
             <div class="options">
                 <button data-page="play">プレイ開始</button>
+                <button class="modeDescriptionButton">モード説明</button>
             </div>
             <button class="back">戻る</button>
         </div>
 
         <div class="page" id="play">
+            <button id="pauseButton" data-page="pause">ポーズ</button>
             <div class="label" id="score">Score:0</div>
             <div class="label" id="remove">Remove:0</div>
+            <div class="label" id="count">Count:0</div>
         </div>
 
-        <div class="page" id="result">
+        <div class="page" id="pause" data-layer="1">
+            <div class="label headingLabel">ポーズ</div>
+            <div class="options">
+                <button data-back="1" id="resumeButton">再開する</button>
+                <button class="modeDescriptionButton">モード説明</button>
+                <button class="retryButton">リトライ</button>
+            </div>
+            <div class="options">
+                <button data-back="4" id="quitButton">タイトルへ</button>
+            </div>
+        </div>
+
+        <div class="page" id="result" data-layer="1">
             <div class="label headingLabel">リザルト</div>
             <div class="text" id="resultText"></div>
             <div class="options">
+                <button class="retryButton">リトライ</button>
                 <button data-back="4">タイトルへ</button>
             </div>
         </div>
 
-        <div class="page" id="howToPlay">
-            <div class="label headingLabel">操作方法</div>
-            <div class="text" id="howToPlayText">
-                C……左回転　V……右回転　B……一手戻し<br />
-                枠<br />
-                ・←→↓↑……移動<br />
-                ・X……設置<br />
-                通常<br />
-                ・←→……横移動　↓……落下<br />
-                ・↑……一番下に設置<br />
+        <div class="modeDescription page" id="modeDescription1" data-layer="1">
+            <div class="label headingLabel">モード説明</div>
+            <div class="text">
+                C……左回転　V……右回転　B……一手戻し　Space……ホールド<br />
+                ←→↓↑……移動　X……設置<br />
+                <br />
+                枠を揃えたら消えます　できるだけ消してください<br />
+                ミノが出現できなくなったら終了です<br />
+                消去が挟まらない限りは一手戻しができます
+            </div>
+            <button class="back">戻る</button>
+        </div>
+
+        <div class="modeDescription page" id="modeDescription2" data-layer="1">
+            <div class="label headingLabel">モード説明</div>
+            <div class="text">
+                C……左回転　V……右回転　B……一手戻し　Space……ホールド<br />
+                ←→……横移動　↓……落下　↑……一番下に設置<br />
+                <br />
+                横一列を揃えたら消えます　できるだけ消してください<br />
+                だんだん早く落下するようになります<br />
+                ミノが出現できなくなったら終了です<br />
+                消去が挟まらない限りは一手戻しができます
+            </div>
+            <button class="back">戻る</button>
+        </div>
+
+        <div class="modeDescription page" id="modeDescription3" data-layer="1">
+            <div class="label headingLabel">モード説明</div>
+            <div class="text">
+                C……左回転　V……右回転　Space……ホールド<br />
+                ←→……横移動　↓……落下　↑……一番下に設置<br />
+                <br />
+                横一列を揃えたら消えます　できるだけ消してください<br />
+                置いたブロックはだんだん消えていきます　じっくり考えてください<br />
+                設置するとカウントが減ります　列を消したら回復します<br />
+                カウントが無くなるかミノが出現できなくなったら終了です<br />
+                このモードでは一手戻しはできません
+            </div>
+            <button class="back">戻る</button>
+        </div>
+
+        <div class="modeDescription page" id="modeDescription4" data-layer="1">
+            <div class="label headingLabel">モード説明</div>
+            <div class="text">
+                C……左回転　V……右回転　B……一手戻し　Space……ホールド<br />
+                ←→……横移動　↓……落下　↑……一番下に設置<br />
+                <br />
+                横一列を揃えたら"そのうち"消えます　できるだけ消してください<br />
+                十回に一回だけ消える判定がなされます　あまり溜めすぎると危険です<br />
+                設置するとカウントが減ります　カウントが0になったら消去判定です<br />
+                ミノが出現できなくなったら終了です<br />
+                消去判定の直後以外は一手戻しができます
+            </div>
+            <button class="back">戻る</button>
+        </div>
+
+        <div class="page" id="aboutThisGame">
+            <div class="label headingLabel">このゲームについて</div>
+            <div class="text">
+                変なテトリスを雑に作って集めました<br />
+                それぞれのモードの遊び方と操作方法はモード説明を読んでください<br />
+                操作方法はモードによって多少変わるので注意してください<br />
+                <br />
+                使用フォント：Orbitron, WDXL Lubrifont JP N<br />
+                開発：うめぼし<br />
+                制作：MCR
             </div>
             <button class="back">戻る</button>
         </div>

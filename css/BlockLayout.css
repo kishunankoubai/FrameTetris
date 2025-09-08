@@ -15,7 +15,9 @@
 
 .block[data-visible="true"] {
     background-color: #ddd;
-    color: red;
+    color: black;
+    line-height: 6vh;
+    text-align: center;
 }
 .block[data-visible="true"][data-kind="0"] {
     background-color: #ff0000;
