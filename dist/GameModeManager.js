@@ -101,7 +101,13 @@ class GameModeManager {
                             this.operatePanel.move(0, -1);
                         }
                         if (keyCode == "KeyX") {
-                            this.operatePanel.put();
+                            if (this.operatePanel.willFinish()) {
+                                pageManager.setPage("check");
+                                this.stop();
+                            }
+                            else {
+                                this.operatePanel.put();
+                            }
                         }
                         if (keyCode == "KeyC") {
                             this.operatePanel.spin(-1);
@@ -115,6 +121,15 @@ class GameModeManager {
                         if (keyCode == "Space") {
                             this.operatePanel.hold();
                         }
+                    };
+                    document.querySelector("#checkYesButton").onclick = () => {
+                        pageManager.backPages(1);
+                        this.start();
+                        this.operatePanel.put();
+                    };
+                    document.querySelector("#checkNoButton").onclick = () => {
+                        pageManager.backPages(1);
+                        this.start();
                     };
                     this.keyboardManager.eventIds.push(EventManager.addEvent({
                         handler: () => {
@@ -637,6 +652,8 @@ class GameModeManager {
         this.loopManager.stop();
         EventManager.removeEvents(this.loopManager.eventIds);
         this.loopManager = new LoopManager();
+        document.querySelector("#checkYesButton").onclick = () => { };
+        document.querySelector("#checkNoButton").onclick = () => { };
         this.isPlaying = false;
         data = structuredClone(initialData);
         repaintLabels([]);

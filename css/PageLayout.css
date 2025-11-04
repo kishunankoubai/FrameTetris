@@ -106,6 +106,16 @@ button {
     }
 }
 
+#check {
+    background-color: #ffffff44;
+    & .text {
+        background-color: #ffffff;
+    }
+    & .label {
+        background-color: #ffffff;
+    }
+}
+
 #aboutThisGame .text {
     font-size: 4vh;
 }

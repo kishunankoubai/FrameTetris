@@ -248,4 +248,15 @@ class MinoOperatePanel {
         this.operable = false;
         EventManager.executeListeningEvents("finish", this.eventIds);
     }
+    /**
+     * @returns 次に置いたら終了するか
+     */
+    willFinish() {
+        const nextMino = new Tetromino();
+        nextMino.s$direction = 0;
+        nextMino.s$kind = this.next[0];
+        nextMino.setLocation(...this.spawnCoordinate);
+        const result = !this.blockManager.canDisplay(nextMino);
+        return result;
+    }
 }
